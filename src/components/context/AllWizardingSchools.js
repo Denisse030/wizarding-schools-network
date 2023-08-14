@@ -1,5 +1,6 @@
 import React from 'react';
 import { useWizardingSchools } from './WizardingSchoolsContext';
+import DeleteWizardingSchool from '../delete/DeleteWizardingSchool';
 
 function AllWizardingSchools() {
   const wizardingSchools = useWizardingSchools();
@@ -12,6 +13,7 @@ function AllWizardingSchools() {
           <li key={school._id}>
             <img src={school.imageUrl} alt={school.name} />
             {school.name}
+            <DeleteWizardingSchool schoolId={school._id} />
           </li>
         ))}
       </ul>

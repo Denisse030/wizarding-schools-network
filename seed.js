@@ -148,13 +148,13 @@ const seed = async () => {
 
     await Promise.all(
       campuses.map((campus) => {
-        return Campuses.create(campus);
+        return campus.create(campus);
       })
     );
 
     await Promise.all(
       students.map((student) => {
-        return Students.create(student);
+        return student.create(student);
       })
     );
 

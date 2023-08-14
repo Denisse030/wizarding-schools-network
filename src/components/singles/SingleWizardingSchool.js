@@ -1,12 +1,15 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useWizardingSchools } from '../context/WizardingSchoolsContext';
 import { useStudents } from '../context/StudentsContext';
+import UpdateWizardingSchool from '../update/UpdateWizardingSchool';
+import UnenrollStudent from '../unenroll/UnenrollStudent';
 
 function SingleWizardingSchool() {
   const { wizardingSchoolId } = useParams();
   const wizardingSchools = useWizardingSchools();
   const students = useStudents();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const wizardingSchool = wizardingSchools.find(school => school._id === wizardingSchoolId);
   const schoolStudents = students.filter(student => student.school === wizardingSchoolId);
@@ -19,16 +22,19 @@ function SingleWizardingSchool() {
       <p>Description: {wizardingSchool.description}</p>
 
       <h3>Students in {wizardingSchool.name}</h3>
-      {schoolStudents.length > 0 ? (
-        <ul>
-          {schoolStudents.map(student => (
-            <li key={student._id}>
-              <Link to={`/students/${student._id}`}>{student.firstName} {student.lastName}</Link>
-            </li>
-          ))}
-        </ul>
+      <ul>
+        {schoolStudents.map(student => (
+          <li key={student._id}>
+            {student.firstName} {student.lastName}
+            <UnenrollStudent schoolId={wizardingSchool._id} studentId={student._id} />
+          </li>
+        ))}
+      </ul>
+
+      {isUpdating ? (
+        <UpdateWizardingSchool schoolId={wizardingSchool._id} onClose={() => setIsUpdating(false)} />
       ) : (
-        <p>No students are enrolled in this school.</p>
+        <button onClick={() => setIsUpdating(true)}>Updating School</button>
       )}
     </div>
   );
